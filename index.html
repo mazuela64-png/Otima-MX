@@ -1,0 +1,1116 @@
+HTML
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O'tima México - Control Comercial SIP</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans flex flex-col min-h-screen">
+
+  <!-- Header / Navigation Bar -->
+  <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-3">
+          <div class="bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-black text-xl px-3 py-1 rounded-lg tracking-wider shadow">
+            O'TIMA
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-base tracking-tight text-white">Turnkey Pharma Systems</span>
+              <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full font-medium">México</span>
+            </div>
+            <p class="text-xs text-slate-400">Control & Pipeline Comercial • Solución SIP (Sales Incentive Planning)</p>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="hidden md:flex space-x-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
+          <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-2 bg-blue-600 text-white shadow">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </button>
+          <button onclick="switchTab('gestion')" id="tab-btn-gestion" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Gestión y Actualización</span>
+          </button>
+          <button onclick="switchTab('kanban')" id="tab-btn-kanban" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700">
+            <i class="fa-solid fa-table-columns"></i>
+            <span>Pipeline Kanban</span>
+          </button>
+          <button onclick="switchTab('pitch')" id="tab-btn-pitch" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700">
+            <i class="fa-brands fa-linkedin"></i>
+            <span>Pitch Generator</span>
+          </button>
+        </nav>
+
+        <!-- Action Tools -->
+        <div class="flex items-center space-x-2">
+          <button onclick="openModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-2 rounded-lg transition-all flex items-center space-x-1.5 shadow">
+            <i class="fa-solid fa-plus"></i>
+            <span class="hidden sm:inline">Nuevo Prospecto</span>
+          </button>
+          <div class="relative group">
+            <button class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs px-2.5 py-2 rounded-lg transition-all">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-slate-200 py-1 hidden group-hover:block z-50 text-slate-700 text-xs">
+              <a href="javascript:void(0)" onclick="exportJSON()" class="block px-4 py-2 hover:bg-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-file-code text-blue-600"></i>
+                <span>Exportar a JSON (GitHub)</span>
+              </a>
+              <a href="javascript:void(0)" onclick="exportCSV()" class="block px-4 py-2 hover:bg-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-file-csv text-emerald-600"></i>
+                <span>Descargar CSV</span>
+              </a>
+              <a href="javascript:void(0)" onclick="resetData()" class="block px-4 py-2 hover:bg-red-50 text-red-600 flex items-center space-x-2">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span>Restaurar datos base (39)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile navigation bar -->
+      <div class="flex md:hidden justify-between border-t border-slate-800 py-2">
+        <button onclick="switchTab('dashboard')" class="text-xs font-medium text-slate-300 hover:text-white px-2 py-1"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+        <button onclick="switchTab('gestion')" class="text-xs font-medium text-slate-300 hover:text-white px-2 py-1"><i class="fa-solid fa-list-check"></i> Gestión</button>
+        <button onclick="switchTab('kanban')" class="text-xs font-medium text-slate-300 hover:text-white px-2 py-1"><i class="fa-solid fa-table-columns"></i> Kanban</button>
+        <button onclick="switchTab('pitch')" class="text-xs font-medium text-slate-300 hover:text-white px-2 py-1"><i class="fa-brands fa-linkedin"></i> Pitch</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- TAB 1: DASHBOARD EJECUTIVO -->
+    <div id="view-dashboard" class="space-y-6">
+      
+      <!-- Top Banner Summary -->
+      <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-lg border border-blue-800/40 relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center space-x-2 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-semibold mb-3 border border-emerald-500/30">
+            <i class="fa-solid fa-bullseye"></i> Estrategia de Expansión México
+          </div>
+          <h2 class="text-2xl font-extrabold tracking-tight">Efectividad y Monitoreo de Incentivos Farma (SIP)</h2>
+          <p class="text-slate-300 text-sm mt-1 leading-relaxed">
+            Eliminando el <span class="text-amber-300 font-semibold">Key Person Risk</span> y las hojas manuales mediante el núcleo Turnkey de O'tima (ETL, Cadi, O'target y O'timaWeb)[cite: 1].
+          </p>
+        </div>
+        <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-8 translate-y-8">
+          <i class="fa-solid fa-network-wired text-9xl"></i>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Universo Total -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Universo Mapeado</p>
+            <h3 id="kpi-total" class="text-3xl font-extrabold text-slate-900 mt-1">39</h3>
+            <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-building text-slate-400 mr-1"></i> Farma & Devices México</p>
+          </div>
+          <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 shadow-inner">
+            <i class="fa-solid fa-sitemap text-xl"></i>
+          </div>
+        </div>
+
+        <!-- Contactados LinkedIn -->
+        <div class="bg-white p-5 rounded-xl border border-blue-200 shadow-sm flex items-center justify-between bg-blue-50/20">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-blue-600">Contactados LinkedIn</p>
+            <h3 id="kpi-contactados" class="text-3xl font-extrabold text-blue-700 mt-1">4</h3>
+            <p class="text-xs text-blue-500 mt-1"><i class="fa-brands fa-linkedin mr-1"></i> En conversación activa</p>
+          </div>
+          <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center shadow-inner">
+            <i class="fa-solid fa-comments text-xl"></i>
+          </div>
+        </div>
+
+        <!-- Clientes Activos -->
+        <div class="bg-white p-5 rounded-xl border border-emerald-200 shadow-sm flex items-center justify-between bg-emerald-50/20">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Cuentas con O'tima</p>
+            <h3 id="kpi-clientes" class="text-3xl font-extrabold text-emerald-700 mt-1">7</h3>
+            <p class="text-xs text-emerald-600 mt-1"><i class="fa-solid fa-arrows-spin mr-1"></i> Retención & Upselling</p>
+          </div>
+          <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shadow-inner">
+            <i class="fa-solid fa-circle-check text-xl"></i>
+          </div>
+        </div>
+
+        <!-- Por Prospectar -->
+        <div class="bg-white p-5 rounded-xl border border-amber-200 shadow-sm flex items-center justify-between bg-amber-50/20">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-amber-700">Por Prospectar</p>
+            <h3 id="kpi-prospectar" class="text-3xl font-extrabold text-amber-700 mt-1">28</h3>
+            <p class="text-xs text-amber-600 mt-1"><i class="fa-solid fa-crosshairs mr-1"></i> Prospectos en Frío</p>
+          </div>
+          <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center shadow-inner">
+            <i class="fa-solid fa-user-plus text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:col-span-2">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Embudo de Prospección Comercial</h3>
+              <p class="text-xs text-slate-500">Distribución de laboratorios según su avance en el embudo</p>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium">39 Cuentas</span>
+          </div>
+          <div class="h-64">
+            <canvas id="pipelineChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Estado de Penetración</h3>
+              <p class="text-xs text-slate-500">Relación clientes vs. mercado abierto</p>
+            </div>
+          </div>
+          <div class="h-64 flex items-center justify-center">
+            <canvas id="statusChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Items & Priority Leads -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Seguimiento Activo en LinkedIn (4 Leads)</h3>
+            </div>
+            <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">Prioridad Alta</span>
+          </div>
+          <div class="space-y-3" id="dashboard-active-leads"></div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                <i class="fa-solid fa-cubes text-sm"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Portafolio O'tima SIP para Prospección</h3>
+            </div>
+            <span class="text-xs text-slate-500">Arquitectura Modular</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+              <span class="font-bold text-blue-700 block mb-1">O'tima ETL (Data Mart)</span>
+              <p class="text-slate-600 leading-relaxed">Extracción, homologación de auditorías IQVIA, Sell-Out, Sell-In y Stock in Trade[cite: 1].</p>
+            </div>
+            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+              <span class="font-bold text-blue-700 block mb-1">Cadi (Homologación)</span>
+              <p class="text-slate-600 leading-relaxed">Consolidación de maestros de productos, equivalencias y escenarios de prueba[cite: 1].</p>
+            </div>
+            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+              <span class="font-bold text-emerald-700 block mb-1">O'tima Core (Incentivos)</span>
+              <p class="text-slate-600 leading-relaxed">Cálculo de reglas complejas para fuerzas GEM, OLE, Hospitales, KAM y Trade[cite: 1].</p>
+            </div>
+            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+              <span class="font-bold text-emerald-700 block mb-1">O'target & O'timaWeb</span>
+              <p class="text-slate-600 leading-relaxed">Fijación de objetivos, portales de consulta y flujo de aprobaciones auditables[cite: 1].</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: CENTRO DE GESTIÓN Y ACTUALIZACIÓN -->
+    <div id="view-gestion" class="hidden space-y-4">
+      
+      <!-- Filter Bar -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+          <input 
+            id="searchInput" 
+            type="text" 
+            placeholder="Buscar por laboratorio, contacto o cargo..." 
+            class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all"
+            oninput="renderGestionTable()"
+          />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <select 
+            id="filterStatus" 
+            class="border border-slate-300 bg-white rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            onchange="renderGestionTable()"
+          >
+            <option value="ALL">Todos los Estados</option>
+            <option value="CLIENTE">Clientes con O'tima (7)</option>
+            <option value="CONTACTADO">Contactados LinkedIn (4)</option>
+            <option value="CONVERSACION">En Conversación</option>
+            <option value="FRIO">Por Prospectar (28)</option>
+          </select>
+
+          <select 
+            id="filterOtima" 
+            class="border border-slate-300 bg-white rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            onchange="renderGestionTable()"
+          >
+            <option value="ALL">Todos (Con / Sin O'tima)</option>
+            <option value="SI">Ya cuenta con O'tima (7)</option>
+            <option value="NO">Aún no tiene O'tima (32)</option>
+          </select>
+
+          <button onclick="clearFilters()" class="px-3 py-2 text-xs text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg font-medium transition-colors">
+            <i class="fa-solid fa-filter-circle-xmark mr-1"></i> Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- Data Table Card -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div class="flex items-center space-x-2">
+            <span class="font-bold text-sm text-slate-800">Directorio de Laboratorios</span>
+            <span id="filtered-count-badge" class="text-xs bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-semibold">39</span>
+          </div>
+          <span class="text-xs text-slate-400 italic">Haz clic en el lápiz o casilla para actualizar</span>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar max-h-[620px]">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="bg-slate-100/80 text-slate-600 uppercase text-[11px] font-bold sticky top-0 z-10 backdrop-blur-sm border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-3 w-12 text-center">#</th>
+                <th class="py-3 px-4">Laboratorio</th>
+                <th class="py-3 px-4">Contacto Clave</th>
+                <th class="py-3 px-3 text-center">LinkedIn</th>
+                <th class="py-3 px-3 text-center">Tiene O'tima</th>
+                <th class="py-3 px-4">Estatus Comercial</th>
+                <th class="py-3 px-4">Próxima Acción / Seguimiento</th>
+                <th class="py-3 px-3 text-center w-24">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="gestionTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: PIPELINE KANBAN INTERACTIVO -->
+    <div id="view-kanban" class="hidden space-y-4">
+      <div class="flex items-center justify-between mb-2">
+        <div>
+          <h3 class="font-bold text-slate-900 text-base">Pipeline Visual de Oportunidades</h3>
+          <p class="text-xs text-slate-500">Mueve y visualiza tus prospectos según cada fase de contacto</p>
+        </div>
+        <div class="text-xs text-slate-500">
+          Total: <span class="font-bold text-slate-800">39 laboratorios</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 overflow-x-auto pb-4">
+        
+        <!-- Columna 1: Por Prospectar -->
+        <div class="bg-slate-200/60 rounded-xl p-3 flex flex-col border border-slate-300/60">
+          <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-300">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+              <span class="text-xs font-bold text-slate-800">Por Prospectar</span>
+            </div>
+            <span id="kanban-count-frio" class="text-xs bg-slate-300 text-slate-800 font-bold px-2 py-0.5 rounded-full">0</span>
+          </div>
+          <div id="kanban-col-frio" class="space-y-2 flex-1 custom-scrollbar overflow-y-auto max-h-[580px]"></div>
+        </div>
+
+        <!-- Columna 2: Contactado LinkedIn -->
+        <div class="bg-blue-50 rounded-xl p-3 flex flex-col border border-blue-200">
+          <div class="flex items-center justify-between pb-2 mb-2 border-b border-blue-200">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <span class="text-xs font-bold text-blue-900">Contactado</span>
+            </div>
+            <span id="kanban-count-contactado" class="text-xs bg-blue-200 text-blue-900 font-bold px-2 py-0.5 rounded-full">0</span>
+          </div>
+          <div id="kanban-col-contactado" class="space-y-2 flex-1 custom-scrollbar overflow-y-auto max-h-[580px]"></div>
+        </div>
+
+        <!-- Columna 3: En Conversación -->
+        <div class="bg-purple-50 rounded-xl p-3 flex flex-col border border-purple-200">
+          <div class="flex items-center justify-between pb-2 mb-2 border-b border-purple-200">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+              <span class="text-xs font-bold text-purple-900">En Conversación</span>
+            </div>
+            <span id="kanban-count-conversacion" class="text-xs bg-purple-200 text-purple-900 font-bold px-2 py-0.5 rounded-full">0</span>
+          </div>
+          <div id="kanban-col-conversacion" class="space-y-2 flex-1 custom-scrollbar overflow-y-auto max-h-[580px]"></div>
+        </div>
+
+        <!-- Columna 4: Demo / Diagnóstico -->
+        <div class="bg-amber-50 rounded-xl p-3 flex flex-col border border-amber-200">
+          <div class="flex items-center justify-between pb-2 mb-2 border-b border-amber-200">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+              <span class="text-xs font-bold text-amber-900">Demo / Propuesta</span>
+            </div>
+            <span id="kanban-count-demo" class="text-xs bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded-full">0</span>
+          </div>
+          <div id="kanban-col-demo" class="space-y-2 flex-1 custom-scrollbar overflow-y-auto max-h-[580px]"></div>
+        </div>
+
+        <!-- Columna 5: Clientes O'tima -->
+        <div class="bg-emerald-50 rounded-xl p-3 flex flex-col border border-emerald-200">
+          <div class="flex items-center justify-between pb-2 mb-2 border-b border-emerald-200">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+              <span class="text-xs font-bold text-emerald-900">Clientes O'tima</span>
+            </div>
+            <span id="kanban-count-cliente" class="text-xs bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded-full">0</span>
+          </div>
+          <div id="kanban-col-cliente" class="space-y-2 flex-1 custom-scrollbar overflow-y-auto max-h-[580px]"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 4: GENERADOR DE MENSAJES LINKEDIN (PITCH) -->
+    <div id="view-pitch" class="hidden space-y-6">
+      
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 text-lg mb-1">Generador de Mensajes Comerciales O'tima SIP</h3>
+        <p class="text-xs text-slate-500 mb-4">Selecciona el perfil de prospecto o el laboratorio para obtener un mensaje optimizado listo para enviar.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Seleccionar Laboratorio</label>
+            <select id="pitchLabSelect" class="w-full border border-slate-300 rounded-lg p-2 text-xs font-medium" onchange="generateCustomPitch()"></select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Tipo de Mensaje</label>
+            <select id="pitchTypeSelect" class="w-full border border-slate-300 rounded-lg p-2 text-xs font-medium" onchange="generateCustomPitch()">
+              <option value="invitacion">1. Nota de Invitación LinkedIn (Máx 300 caracteres)</option>
+              <option value="primer_mensaje">2. Primer Mensaje (Al aceptar conexión)</option>
+              <option value="seguimiento">3. Mensaje de Seguimiento (Para los 4 contactados)</option>
+              <option value="devices">4. Enfoque Especial: Dispositivos Médicos</option>
+              <option value="upselling">5. Enfoque Upselling (Cuentas Activas con O'tima)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Dolor Principal a Enfatizar</label>
+            <select id="pitchPainSelect" class="w-full border border-slate-300 rounded-lg p-2 text-xs font-medium" onchange="generateCustomPitch()">
+              <option value="iqvia">Automatización de Fuentes (IQVIA + Sell-Out)</option>
+              <option value="key_person">Eliminación de 'Key Person Risk' y Hojas Manuales</option>
+              <option value="trazabilidad">Gobernanza y Aprobaciones Auditables</option>
+              <option value="simulacion">Flexibilidad para Simular Nuevos Planes</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generated Pitch Result Card -->
+      <div class="bg-gradient-to-br from-slate-900 to-blue-950 rounded-xl p-6 text-white shadow-md border border-blue-900">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2">
+            <i class="fa-brands fa-linkedin text-blue-400 text-lg"></i>
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-300">Mensaje Sugerido para Enviar</span>
+          </div>
+          <button onclick="copyPitch()" id="copy-btn" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition-colors shadow">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copiar Mensaje</span>
+          </button>
+        </div>
+
+        <div class="bg-slate-800/80 rounded-lg p-4 border border-slate-700 font-sans text-sm leading-relaxed text-slate-100 whitespace-pre-line" id="pitchOutput"></div>
+
+        <div class="mt-4 pt-4 border-t border-slate-700/60 flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2">
+          <span><i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Tip: Personaliza siempre el nombre y puesto antes de enviar en LinkedIn.</span>
+          <span id="charCount" class="font-mono text-slate-300">0 caracteres</span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL: REGISTRAR / EDITAR PROSPECTO -->
+  <div id="prospectModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200">
+      
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-blue-700 to-blue-900 px-6 py-4 text-white flex items-center justify-between">
+        <div>
+          <h3 id="modalTitle" class="font-bold text-base">Editar Laboratorio</h3>
+          <p class="text-xs text-blue-200">Control de Información Comercial</p>
+        </div>
+        <button onclick="closeModal()" class="text-white/80 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <form id="prospectForm" onsubmit="saveProspect(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="editId" />
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block font-semibold text-slate-700 mb-1">Nombre Laboratorio / Empresa *</label>
+            <input type="text" id="modalNombre" required class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs" />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block font-semibold text-slate-700 mb-1">Contacto Clave</label>
+            <input type="text" id="modalContacto" placeholder="Ej. Lic. Roberto Gómez" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block font-semibold text-slate-700 mb-1">Cargo / Puesto</label>
+            <input type="text" id="modalCargo" placeholder="Ej. SFE Manager / Sales Ops" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs" />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block font-semibold text-slate-700 mb-1">Estatus Comercial</label>
+            <select id="modalEstatus" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-medium">
+              <option value="Por Contactar">Por Contactar</option>
+              <option value="Contactado LinkedIn">Contactado LinkedIn</option>
+              <option value="En Conversación">En Conversación</option>
+              <option value="Demo Agendada">Demo Agendada</option>
+              <option value="Cliente Activo">Cliente Activo (Con O'tima)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Contactado</label>
+            <select id="modalLinkedin" class="w-full border border-slate-300 rounded-lg p-1.5 text-xs bg-white">
+              <option value="false">No</option>
+              <option value="true">Sí</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">¿Tiene O'tima?</label>
+            <select id="modalTiene" class="w-full border border-slate-300 rounded-lg p-1.5 text-xs bg-white">
+              <option value="false">No</option>
+              <option value="true">Sí</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">¿Conocido?</label>
+            <select id="modalConocido" class="w-full border border-slate-300 rounded-lg p-1.5 text-xs bg-white">
+              <option value="false">No</option>
+              <option value="true">Sí</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Próxima Acción Sugerida / Seguimiento</label>
+          <input type="text" id="modalAccion" placeholder="Ej. Enviar mensaje de seguimiento o propuesta SIP" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Notas Comerciales</label>
+          <textarea id="modalNotas" rows="2" placeholder="Notas sobre dolores, auditorías IQVIA, tamaño de fuerza..." class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold transition-colors">
+            Cancelar
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors shadow">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-4 mt-auto text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-slate-800">O'tima SIP México</span>
+        <span>•</span>
+        <span>Turnkey Pharma Systems</span>
+      </div>
+      <div>
+        Dashboard & Control Comercial • 39 Cuentas Estratégicas
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const DEFAULT_LABS = [
+      { id: 1, nombre: "J&J", contacto: "", cargo: "Head of Commercial Operations / SFE", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Buscar perfil de SFE / Compensation en LinkedIn", notas: "Multinacional farma y medical devices" },
+      { id: 2, nombre: "Roche", contacto: "", cargo: "Sales Force Effectiveness Manager", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Mapear responsable de incentivos y liquidación", notas: "Fuerte foco en alta especialidad" },
+      { id: 3, nombre: "Lilly", contacto: "Isaac Mayoral", cargo: "Sales Operations / Effectiveness", linkedin: true, conocido: false, tiene: false, estatus: "Contactado LinkedIn", accion: "Enviar mensaje de seguimiento 2 (Foco IQVIA)", notas: "Mensaje 1 enviado en LinkedIn" },
+      { id: 4, nombre: "MSD", contacto: "", cargo: "Commercial Excellence Director", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Identificar tomadores de decisión en CDMX", notas: "Líneas oncología y vacunas" },
+      { id: 5, nombre: "Pfizer", contacto: "", cargo: "Compensation & Incentive Lead", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Prospectar perfil de HR / Sales Ops", notas: "Grandes fuerzas comerciales" },
+      { id: 6, nombre: "Abbvie", contacto: "Gerencia Comercial", cargo: "Commercial Operations", linkedin: false, conocido: false, tiene: true, estatus: "Cliente Activo", accion: "Explorar upselling (Módulos Cadi, O'target)", notas: "Cuenta activa de O'tima" },
+      { id: 7, nombre: "Novartis", contacto: "", cargo: "SFE & Digital Lead", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Buscar responsable de gestión comercial", notas: "Portafolio innovador" },
+      { id: 8, nombre: "Sanofi", contacto: "Dirección de Efectividad", cargo: "Commercial Operations", linkedin: false, conocido: false, tiene: true, estatus: "Cliente Activo", accion: "Revisar extensiones y nuevos lanzamientos", notas: "Cuenta activa de O'tima" },
+      { id: 9, nombre: "Bayer", contacto: "", cargo: "Sales Force Effectiveness Lead", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Conectar con gerencia de Farma y Consumo", notas: "División Pharma / Consumer" },
+      { id: 10, nombre: "Novo Nordisk", contacto: "", cargo: "Commercial Excellence Manager", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Prospectar en LinkedIn", notas: "Alta demanda en diabetes y obesidad" },
+      { id: 11, nombre: "Bristol", contacto: "Equipo SIP", cargo: "Commercial Effectiveness", linkedin: false, conocido: false, tiene: true, estatus: "Cliente Activo", accion: "Reunión de alineación de módulos", notas: "Cuenta activa de O'tima (BMS)" },
+      { id: 12, nombre: "GSK", contacto: "", cargo: "Sales Operations Manager", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Identificar lead de incentivos en México", notas: "Farma y Vacunas" },
+      { id: 13, nombre: "Abbott", contacto: "", cargo: "Commercial Director / Sales Ops", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Mapear divisiones Nutrition y Pharma", notas: "Diversas unidades de negocio" },
+      { id: 14, nombre: "Astra", contacto: "", cargo: "SFE & Incentive Planning Lead", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Conectar con equipo de efectividad de fuerza", notas: "Crecimiento acelerado en oncología/respiratorio" },
+      { id: 15, nombre: "Amgen", contacto: "", cargo: "Commercial Operations Lead", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Buscar contacto en CDMX", notas: "Biotecnología y alta especialidad" },
+      { id: 16, nombre: "Takeda", contacto: "", cargo: "Head of Commercial Excellence", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Prospectar tomador de decisión", notas: "Gastro y enfermedades raras" },
+      { id: 17, nombre: "Gilead", contacto: "", cargo: "Commercial Operations Manager", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Identificar responsable de comisiones", notas: "Alta especialidad y VIH" },
+      { id: 18, nombre: "Boehringer", contacto: "", cargo: "Sales Force Effectiveness", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Mapear gerencia de incentivos CDMX", notas: "Fuerzas de venta humana y animal" },
+      { id: 19, nombre: "Merck", contacto: "", cargo: "Commercial Operations Lead", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Conectar con SFE México", notas: "Merck Group (Healthcare)" },
+      { id: 20, nombre: "Teva", contacto: "", cargo: "Director de Operaciones Comerciales", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Prospectar en LinkedIn", notas: "Genéricos y especialidad" },
+      { id: 21, nombre: "Astellas", contacto: "Dirección Farma", cargo: "Commercial Operations", linkedin: false, conocido: false, tiene: true, estatus: "Cliente Activo", accion: "Seguimiento a propuesta de nuevos módulos", notas: "Cuenta activa de O'tima" },
+      { id: 22, nombre: "Glenmark", contacto: "Comercial México", cargo: "Sales Operations", linkedin: false, conocido: false, tiene: true, estatus: "Cliente Activo", accion: "Monitoreo de operación de cálculo", notas: "Cuenta activa de O'tima" },
+      { id: 23, nombre: "Opella", contacto: "Consumer Health", cargo: "Commercial Excellence", linkedin: false, conocido: false, tiene: true, estatus: "Cliente Activo", accion: "Revisar planes de incentivos de consumo", notas: "División Consumer Healthcare (Sanofi)" },
+      { id: 24, nombre: "Biopass", contacto: "Operaciones LATAM", cargo: "Commercial Ops Lead", linkedin: false, conocido: false, tiene: true, estatus: "Cliente Activo", accion: "Evaluación de módulo O'target", notas: "Cuenta activa de O'tima" },
+      { id: 25, nombre: "Silanes", contacto: "", cargo: "Gerente de Efectividad Comercial", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Prospectar en LinkedIn (Farma Nacional)", notas: "Laboratorio mexicano líder" },
+      { id: 26, nombre: "Armstrong", contacto: "", cargo: "Gerencia de Ventas / Incentivos", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Identificar lead comercial", notas: "Farma mexicana de prescripción" },
+      { id: 27, nombre: "Pisa", contacto: "", cargo: "Director de Efectividad de Fuerzas de Venta", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Abordar gran volumen de representantes (GEM)", notas: "Uno de los mayores empleadores farma MX" },
+      { id: 28, nombre: "Landsteiner", contacto: "", cargo: "Operaciones Comerciales", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Mapear tomador de decisiones", notas: "Genéricos y biotecnología" },
+      { id: 29, nombre: "Probiomed", contacto: "", cargo: "Dirección Comercial", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Conectar con SFE / Finanzas", notas: "Biotecnología nacional" },
+      { id: 30, nombre: "Carnot", contacto: "", cargo: "Gerente de Incentivos y SFE", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Prospectar en LinkedIn", notas: "Farma mexicana con presencia regional" },
+      { id: 31, nombre: "Stendhal", contacto: "", cargo: "Commercial Excellence Lead", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Contactar con enfoque alta especialidad", notas: "Alianzas y especialidad" },
+      { id: 32, nombre: "Grifols", contacto: "", cargo: "Sales Operations Manager", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Mapear institucional / hospitales", notas: "Líneas de hemoderivados y hospital" },
+      { id: 33, nombre: "Menarini", contacto: "", cargo: "Commercial Operations", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Buscar responsable en CDMX", notas: "Farma europea en expansión en MX" },
+      { id: 34, nombre: "Chiesi", contacto: "", cargo: "Head of Commercial Excellence", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Prospectar en LinkedIn", notas: "Respiratorio y especialidad" },
+      { id: 35, nombre: "Siegfried", contacto: "", cargo: "Gerente de Operaciones Comerciales", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Contactar por LinkedIn", notas: "Siegfried Rhein México" },
+      { id: 36, nombre: "Liomont", contacto: "", cargo: "Director de Fuerza de Ventas / SFE", linkedin: false, conocido: false, tiene: false, estatus: "Por Contactar", accion: "Buscar responsable de incentivos", notas: "Gran laboratorio nacional" },
+      { id: 37, nombre: "Phillips", contacto: "Alberto Villagran", cargo: "Commercial Operations Lead", linkedin: true, conocido: false, tiene: false, estatus: "Contactado LinkedIn", accion: "Enviar caso de valor en Dispositivos Médicos", notas: "Dispositivos médicos / Health systems" },
+      { id: 38, nombre: "Kenvue", contacto: "Carlos Rojas", cargo: "Sales Incentive / SFE Manager", linkedin: true, conocido: false, tiene: false, estatus: "Contactado LinkedIn", accion: "Dar seguimiento para agendar call 15 min", notas: "Consumer Health (Ex J&J)" },
+      { id: 39, nombre: "Grünenthal", contacto: "Ximena Salinas", cargo: "Commercial Excellence Lead", linkedin: true, conocido: false, tiene: false, estatus: "Contactado LinkedIn", accion: "Proponer llamada exploratoria SIP", notas: "Líder en manejo de dolor" }
+    ];
+
+    let laboratoriosData = [];
+    let pipelineChartInstance = null;
+    let statusChartInstance = null;
+
+    function initApp() {
+      const stored = localStorage.getItem("otima_mexico_labs_data");
+      if (stored) {
+        try { laboratoriosData = JSON.parse(stored); } catch (e) { laboratoriosData = [...DEFAULT_LABS]; }
+      } else {
+        laboratoriosData = [...DEFAULT_LABS];
+        saveData();
+      }
+
+      updateKPIs();
+      renderDashboardActiveLeads();
+      renderGestionTable();
+      renderKanban();
+      populatePitchSelect();
+      generateCustomPitch();
+      initCharts();
+    }
+
+    function saveData() {
+      localStorage.setItem("otima_mexico_labs_data", JSON.stringify(laboratoriosData));
+    }
+
+    function resetData() {
+      if (confirm("¿Deseas restaurar la base original con los 39 laboratorios?")) {
+        laboratoriosData = JSON.parse(JSON.stringify(DEFAULT_LABS));
+        saveData();
+        refreshAllViews();
+      }
+    }
+
+    function refreshAllViews() {
+      updateKPIs();
+      renderDashboardActiveLeads();
+      renderGestionTable();
+      renderKanban();
+      populatePitchSelect();
+      generateCustomPitch();
+      updateCharts();
+    }
+
+    function switchTab(tabId) {
+      const tabs = ['dashboard', 'gestion', 'kanban', 'pitch'];
+      tabs.forEach(t => {
+        const viewEl = document.getElementById(`view-${t}`);
+        const btnEl = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          viewEl.classList.remove('hidden');
+          if (btnEl) {
+            btnEl.classList.add('bg-blue-600', 'text-white', 'shadow');
+            btnEl.classList.remove('text-slate-300');
+          }
+        } else {
+          viewEl.classList.add('hidden');
+          if (btnEl) {
+            btnEl.classList.remove('bg-blue-600', 'text-white', 'shadow');
+            btnEl.classList.add('text-slate-300');
+          }
+        }
+      });
+
+      if (tabId === 'dashboard') {
+        setTimeout(updateCharts, 50);
+      }
+    }
+
+    function updateKPIs() {
+      const total = laboratoriosData.length;
+      const contactados = laboratoriosData.filter(l => l.linkedin && !l.tiene).length;
+      const clientes = laboratoriosData.filter(l => l.tiene).length;
+      const prospectar = laboratoriosData.filter(l => !l.linkedin && !l.tiene).length;
+
+      document.getElementById("kpi-total").innerText = total;
+      document.getElementById("kpi-contactados").innerText = contactados;
+      document.getElementById("kpi-clientes").innerText = clientes;
+      document.getElementById("kpi-prospectar").innerText = prospectar;
+    }
+
+    function renderDashboardActiveLeads() {
+      const container = document.getElementById("dashboard-active-leads");
+      const activeLeads = laboratoriosData.filter(l => l.linkedin || l.estatus === "Contactado LinkedIn" || l.estatus === "En Conversación");
+      
+      if (activeLeads.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 italic">No hay leads contactados en este momento.</p>`;
+        return;
+      }
+
+      container.innerHTML = activeLeads.map(lead => `
+        <div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white transition-all shadow-xs">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
+              ${lead.nombre.substring(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-slate-900 text-xs">${lead.nombre}</span>
+                <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-semibold">${lead.contacto || 'Contacto Mapeado'}</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-0.5">${lead.cargo || 'Operations Lead'}</p>
+            </div>
+          </div>
+          <button onclick="openModal(${lead.id})" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center space-x-1">
+            <span>Actualizar</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function renderGestionTable() {
+      const tbody = document.getElementById("gestionTableBody");
+      const search = (document.getElementById("searchInput").value || "").toLowerCase();
+      const filterStatus = document.getElementById("filterStatus").value;
+      const filterOtima = document.getElementById("filterOtima").value;
+
+      const filtered = laboratoriosData.filter(item => {
+        const matchSearch = item.nombre.toLowerCase().includes(search) || 
+                            (item.contacto && item.contacto.toLowerCase().includes(search)) ||
+                            (item.cargo && item.cargo.toLowerCase().includes(search));
+        
+        let matchStatus = true;
+        if (filterStatus === "CLIENTE") matchStatus = item.tiene || item.estatus === "Cliente Activo";
+        else if (filterStatus === "CONTACTADO") matchStatus = item.linkedin || item.estatus === "Contactado LinkedIn";
+        else if (filterStatus === "CONVERSACION") matchStatus = item.estatus === "En Conversación";
+        else if (filterStatus === "FRIO") matchStatus = !item.linkedin && !item.tiene && item.estatus === "Por Contactar";
+
+        let matchOtima = true;
+        if (filterOtima === "SI") matchOtima = item.tiene === true;
+        else if (filterOtima === "NO") matchOtima = item.tiene === false;
+
+        return matchSearch && matchStatus && matchOtima;
+      });
+
+      document.getElementById("filtered-count-badge").innerText = filtered.length;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400 italic">No se encontraron laboratorios con los filtros aplicados.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        let badge = "";
+        if (item.tiene || item.estatus === "Cliente Activo") {
+          badge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Cliente Activo</span>`;
+        } else if (item.estatus === "En Conversación") {
+          badge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-purple-100 text-purple-800 border border-purple-200">En Conversación</span>`;
+        } else if (item.linkedin || item.estatus === "Contactado LinkedIn") {
+          badge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-800 border border-blue-200">Contactado</span>`;
+        } else if (item.estatus === "Demo Agendada") {
+          badge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">Demo Agendada</span>`;
+        } else {
+          badge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">Por Contactar</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-blue-50/40 transition-colors">
+            <td class="py-3 px-3 text-center text-slate-400 font-mono text-[11px]">${item.id}</td>
+            <td class="py-3 px-4 font-bold text-slate-900">${item.nombre}</td>
+            <td class="py-3 px-4">
+              <div class="font-medium text-slate-800">${item.contacto ? item.contacto : '<span class="text-slate-400 italic">Por identificar</span>'}</div>
+              <div class="text-[10px] text-slate-400">${item.cargo || ''}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button onclick="toggleLinkedIn(${item.id})" title="Alternar estatus de contacto LinkedIn">
+                ${item.linkedin ? '<i class="fa-solid fa-circle-check text-blue-600 text-base hover:scale-110 transition-transform"></i>' : '<i class="fa-regular fa-circle text-slate-300 text-base hover:text-slate-400"></i>'}
+              </button>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button onclick="toggleTiene(${item.id})" title="Alternar si cuenta con O'tima">
+                ${item.tiene ? '<i class="fa-solid fa-circle-check text-emerald-600 text-base hover:scale-110 transition-transform"></i>' : '<i class="fa-regular fa-circle text-slate-300 text-base hover:text-slate-400"></i>'}
+              </button>
+            </td>
+            <td class="py-3 px-4">${badge}</td>
+            <td class="py-3 px-4 text-slate-600 text-[11px] max-w-xs truncate" title="${item.accion || ''}">
+              ${item.accion || '<span class="text-slate-400 italic">Sin acción programada</span>'}
+            </td>
+            <td class="py-3 px-3 text-center space-x-1">
+              <button onclick="openModal(${item.id})" class="p-1.5 rounded hover:bg-slate-200 text-slate-600 hover:text-blue-600 transition-colors" title="Editar">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button onclick="deleteProspect(${item.id})" class="p-1.5 rounded hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors" title="Eliminar">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function clearFilters() {
+      document.getElementById("searchInput").value = "";
+      document.getElementById("filterStatus").value = "ALL";
+      document.getElementById("filterOtima").value = "ALL";
+      renderGestionTable();
+    }
+
+    function toggleLinkedIn(id) {
+      const item = laboratoriosData.find(l => l.id === id);
+      if (item) {
+        item.linkedin = !item.linkedin;
+        if (item.linkedin && item.estatus === "Por Contactar") item.estatus = "Contactado LinkedIn";
+        else if (!item.linkedin && item.estatus === "Contactado LinkedIn") item.estatus = "Por Contactar";
+        saveData();
+        refreshAllViews();
+      }
+    }
+
+    function toggleTiene(id) {
+      const item = laboratoriosData.find(l => l.id === id);
+      if (item) {
+        item.tiene = !item.tiene;
+        if (item.tiene) item.estatus = "Cliente Activo";
+        else if (item.estatus === "Cliente Activo") item.estatus = "Por Contactar";
+        saveData();
+        refreshAllViews();
+      }
+    }
+
+    function renderKanban() {
+      const cols = {
+        frio: document.getElementById("kanban-col-frio"),
+        contactado: document.getElementById("kanban-col-contactado"),
+        conversacion: document.getElementById("kanban-col-conversacion"),
+        demo: document.getElementById("kanban-col-demo"),
+        cliente: document.getElementById("kanban-col-cliente")
+      };
+
+      Object.values(cols).forEach(c => c.innerHTML = "");
+      const counts = { frio: 0, contactado: 0, conversacion: 0, demo: 0, cliente: 0 };
+
+      laboratoriosData.forEach(item => {
+        let targetCol = "frio";
+        if (item.tiene || item.estatus === "Cliente Activo") targetCol = "cliente";
+        else if (item.estatus === "Demo Agendada") targetCol = "demo";
+        else if (item.estatus === "En Conversación") targetCol = "conversacion";
+        else if (item.linkedin || item.estatus === "Contactado LinkedIn") targetCol = "contactado";
+
+        counts[targetCol]++;
+
+        const card = document.createElement("div");
+        card.className = "bg-white p-3 rounded-lg border border-slate-200/80 shadow-xs hover:shadow-md transition-all cursor-pointer";
+        card.onclick = () => openModal(item.id);
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-slate-900 text-xs">${item.nombre}</span>
+            <span class="text-[10px] text-slate-400 font-mono">#${item.id}</span>
+          </div>
+          <p class="text-[11px] text-slate-600 font-medium">${item.contacto || '<span class="text-slate-400 italic">Por asignar</span>'}</p>
+          <p class="text-[10px] text-slate-400 truncate mt-0.5">${item.cargo || 'Cargo N/D'}</p>
+          <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
+            <span class="truncate max-w-[140px]">${item.accion ? item.accion.substring(0, 22) + '...' : 'Sin acción'}</span>
+            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+          </div>
+        `;
+
+        cols[targetCol].appendChild(card);
+      });
+
+      document.getElementById("kanban-count-frio").innerText = counts.frio;
+      document.getElementById("kanban-count-contactado").innerText = counts.contactado;
+      document.getElementById("kanban-count-conversacion").innerText = counts.conversacion;
+      document.getElementById("kanban-count-demo").innerText = counts.demo;
+      document.getElementById("kanban-count-cliente").innerText = counts.cliente;
+    }
+
+    function openModal(id = null) {
+      const modal = document.getElementById("prospectModal");
+      const form = document.getElementById("prospectForm");
+      form.reset();
+
+      if (id) {
+        const item = laboratoriosData.find(l => l.id === id);
+        if (item) {
+          document.getElementById("modalTitle").innerText = `Editar: ${item.nombre}`;
+          document.getElementById("editId").value = item.id;
+          document.getElementById("modalNombre").value = item.nombre;
+          document.getElementById("modalContacto").value = item.contacto || "";
+          document.getElementById("modalCargo").value = item.cargo || "";
+          document.getElementById("modalEstatus").value = item.estatus || "Por Contactar";
+          document.getElementById("modalLinkedin").value = item.linkedin ? "true" : "false";
+          document.getElementById("modalTiene").value = item.tiene ? "true" : "false";
+          document.getElementById("modalConocido").value = item.conocido ? "true" : "false";
+          document.getElementById("modalAccion").value = item.accion || "";
+          document.getElementById("modalNotas").value = item.notas || "";
+        }
+      } else {
+        document.getElementById("modalTitle").innerText = "Nuevo Prospecto Farma";
+        document.getElementById("editId").value = "";
+        document.getElementById("modalLinkedin").value = "false";
+        document.getElementById("modalTiene").value = "false";
+        document.getElementById("modalConocido").value = "false";
+        document.getElementById("modalEstatus").value = "Por Contactar";
+      }
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("prospectModal").classList.add("hidden");
+    }
+
+    function saveProspect(e) {
+      e.preventDefault();
+      const editId = document.getElementById("editId").value;
+      const nombre = document.getElementById("modalNombre").value.trim();
+      const contacto = document.getElementById("modalContacto").value.trim();
+      const cargo = document.getElementById("modalCargo").value.trim();
+      const estatus = document.getElementById("modalEstatus").value;
+      const linkedin = document.getElementById("modalLinkedin").value === "true";
+      const tiene = document.getElementById("modalTiene").value === "true";
+      const conocido = document.getElementById("modalConocido").value === "true";
+      const accion = document.getElementById("modalAccion").value.trim();
+      const notas = document.getElementById("modalNotas").value.trim();
+
+      if (editId) {
+        const idx = laboratoriosData.findIndex(l => l.id === parseInt(editId));
+        if (idx !== -1) {
+          laboratoriosData[idx] = { ...laboratoriosData[idx], nombre, contacto, cargo, estatus, linkedin, tiene, conocido, accion, notas };
+        }
+      } else {
+        const newId = laboratoriosData.length > 0 ? Math.max(...laboratoriosData.map(l => l.id)) + 1 : 1;
+        laboratoriosData.push({ id: newId, nombre, contacto, cargo, estatus, linkedin, tiene, conocido, accion, notas });
+      }
+
+      saveData();
+      closeModal();
+      refreshAllViews();
+    }
+
+    function deleteProspect(id) {
+      if (confirm("¿Estás seguro de eliminar este laboratorio del seguimiento?")) {
+        laboratoriosData = laboratoriosData.filter(l => l.id !== id);
+        saveData();
+        refreshAllViews();
+      }
+    }
+
+    function populatePitchSelect() {
+      const select = document.getElementById("pitchLabSelect");
+      select.innerHTML = laboratoriosData.map(l => `
+        <option value="${l.id}">${l.nombre} ${l.contacto ? `(${l.contacto})` : ''}</option>
+      `).join("");
+    }
+
+    function generateCustomPitch() {
+      const labId = parseInt(document.getElementById("pitchLabSelect").value) || 1;
+      const lab = laboratoriosData.find(l => l.id === labId) || laboratoriosData[0];
+      const type = document.getElementById("pitchTypeSelect").value;
+
+      const contactoNombre = lab.contacto ? lab.contacto.split(" ")[0] : "[Nombre]";
+      const empresa = lab.nombre;
+
+      let msg = "";
+      if (type === "invitacion") {
+        msg = `Hola ${contactoNombre}, veo tu trayectoria en Sales Effectiveness en ${empresa}. En O'tima ayudamos a la industria farmacéutica en LATAM a automatizar el cálculo de incentivos (SIP) integrando IQVIA y ventas internas sin errores manuales. ¡Me gustaría conectar!`;
+      } else if (type === "primer_mensaje") {
+        msg = `Hola ${contactoNombre}, muchas gracias por conectar.\n\nSé que los cierres de ciclo y el cálculo de incentivos para fuerzas de ventas suelen consumir días valiosos del equipo entre hojas de cálculo, homologación de auditorías IQVIA y validaciones por correo.\n\nEn O'tima desarrollamos una solución Turnkey especializada para Pharma que actúa como sistema central (ETL, cálculo de reglas complejas y portal de aprobaciones auditables), eliminando el riesgo operativo de personas clave.\n\n¿Tendrías 15 minutos la próxima semana para una llamada breve y mostrarte cómo optimizamos este proceso en laboratorios de la región?`;
+      } else if (type === "seguimiento") {
+        msg = `Hola ${contactoNombre}, gusto en saludarte.\n\nQuería dar un breve seguimiento a mi mensaje anterior. En O'tima apoyamos a laboratorios en México a automatizar el 100% de la liquidación de incentivos para equipos comerciales (GEM/OLE) y KAMs, reduciendo los tiempos de cierre de semanas a minutos con total trazabilidad.\n\n¿Te vendría bien una breve llamada de 10 minutos este jueves o viernes para explorar si hace sentido para ${empresa}?`;
+      } else if (type === "devices") {
+        msg = `Hola ${contactoNombre}, un gusto saludarte.\n\nEn la industria de Medical Devices y tecnología para la salud, la gestión de esquemas de incentivos híbridos (distribuidores, líneas directas e institucionales) requiere una flexibilidad analítica que las hojas de cálculo ya no soportan con seguridad.\n\nEn O'tima implementamos motores de cálculo de incentivos y módulos ETL que homologan automáticamente tus fuentes de datos comerciales con auditoría total.\n\n¿Tendrías 15 minutos para conversar sobre cómo simplificamos este reto operativo?`;
+      } else if (type === "upselling") {
+        msg = `Hola ${contactoNombre}, un gusto saludarte.\n\nDado el éxito y la estabilidad en el cálculo de incentivos con O'tima, queríamos compartirte las nuevas capacidades de nuestros módulos complementarios: Cadi (homologación avanzada de catálogos y escenarios de prueba) y O'target (fijación automatizada de cuotas y objetivos comerciales).\n\n¿Cuándo tendrías un espacio para una sesión de 15 minutos para revisar el potencial impacto en ${empresa}?`;
+      }
+
+      document.getElementById("pitchOutput").innerText = msg;
+      document.getElementById("charCount").innerText = `${msg.length} caracteres`;
+    }
+
+    function copyPitch() {
+      const text = document.getElementById("pitchOutput").innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById("copy-btn");
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> <span>¡Copiado!</span>`;
+        btn.classList.add("bg-emerald-600");
+        btn.classList.remove("bg-blue-600");
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove("bg-emerald-600");
+          btn.classList.add("bg-blue-600");
+        }, 2000);
+      });
+    }
+
+    function exportJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+        pais: "México",
+        solucion: "O'tima SIP - Sales Incentive Planning",
+        fecha_exportacion: new Date().toISOString().split("T")[0],
+        prospectos: laboratoriosData
+      }, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "laboratorios_mx.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function exportCSV() {
+      const headers = ["ID", "Laboratorio", "Contacto", "Cargo", "LinkedIn_Contactado", "Tiene_Otima", "Estatus", "Accion_Siguiente", "Notas"];
+      const rows = laboratoriosData.map(l => [
+        l.id,
+        `"${l.nombre.replace(/"/g, '""')}"`,
+        `"${(l.contacto || '').replace(/"/g, '""')}"`,
+        `"${(l.cargo || '').replace(/"/g, '""')}"`,
+        l.linkedin ? "SI" : "NO",
+        l.tiene ? "SI" : "NO",
+        `"${(l.estatus || '').replace(/"/g, '""')}"`,
+        `"${(l.accion || '').replace(/"/g, '""')}"`,
+        `"${(l.notas || '').replace(/"/g, '""')}"`
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "otima_mexico_pipeline.csv");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function initCharts() {
+      const funnelCtx = document.getElementById('pipelineChart').getContext('2d');
+      const statusCtx = document.getElementById('statusChart').getContext('2d');
+
+      const contactados = laboratoriosData.filter(l => l.linkedin && !l.tiene).length;
+      const clientes = laboratoriosData.filter(l => l.tiene).length;
+      const prospectar = laboratoriosData.filter(l => !l.linkedin && !l.tiene).length;
+
+      pipelineChartInstance = new Chart(funnelCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Por Prospectar', 'Contactados LinkedIn', 'En Conversación', 'Clientes O\'tima Activos'],
+          datasets: [{
+            label: 'Laboratorios',
+            data: [prospectar, contactados, 0, clientes],
+            backgroundColor: ['#f59e0b', '#3b82f6', '#8b5cf6', '#10b981'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { stepSize: 5 } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      statusChartInstance = new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Por Prospectar', 'Contactados', 'Clientes Activos'],
+          datasets: [{
+            data: [prospectar, contactados, clientes],
+            backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+          cutout: '70%'
+        }
+      });
+    }
+
+    function updateCharts() {
+      if (!pipelineChartInstance || !statusChartInstance) return;
+
+      const contactados = laboratoriosData.filter(l => l.linkedin && !l.tiene).length;
+      const clientes = laboratoriosData.filter(l => l.tiene).length;
+      const prospectar = laboratoriosData.filter(l => !l.linkedin && !l.tiene).length;
+      const conversacion = laboratoriosData.filter(l => l.estatus === 'En Conversación').length;
+
+      pipelineChartInstance.data.datasets[0].data = [prospectar, contactados, conversacion, clientes];
+      pipelineChartInstance.update();
+
+      statusChartInstance.data.datasets[0].data = [prospectar, contactados, clientes];
+      statusChartInstance.update();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initApp();
+    });
+  </script>
+</body>
+</html>
