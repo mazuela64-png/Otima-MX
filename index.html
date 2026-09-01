@@ -5,7 +5,7 @@ HTML
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>O'tima México - Control y Gestión Comercial SIP</title>
-    <!-- Tailwind CSS para diseño profesional -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
@@ -34,7 +34,7 @@ HTML
                     <p class="text-xs text-slate-400">Sales Incentive Planning & ETL Automation</p>
                 </div>
             </div>
-            <!-- Navegación por pestañas -->
+            <!-- Navegación por Pestañas -->
             <div class="flex bg-slate-800 p-1 rounded-lg border border-slate-700">
                 <button onclick="cambiarVista('dashboard')" id="btn-dashboard" class="px-4 py-1.5 rounded-md text-xs font-semibold transition-all bg-otimaBlue text-white shadow">
                     <i class="fa-solid fa-chart-pie mr-1"></i> Dashboard
@@ -51,7 +51,7 @@ HTML
 
         <!-- ================= VISTA 1: DASHBOARD ================= -->
         <div id="vista-dashboard" class="space-y-6">
-            <!-- Métricas / KPIs -->
+            <!-- Métricas / KPIs Superiores -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Universo Total Target</p>
@@ -59,69 +59,69 @@ HTML
                     <span class="text-xs text-slate-500 font-medium">Cobertura Nacional México</span>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                    <p class="text-xs font-semibold text-blue-600 uppercase tracking-wider">LinkedIn: Aceptado</p>
-                    <h3 id="kpi-aceptados" class="text-2xl font-bold text-otimaBlue mt-1">0</h3>
+                    <p class="text-xs font-semibold text-blue-600 uppercase tracking-wider">LinkedIn: Conectados</p>
+                    <h3 id="kpi-contactados" class="text-2xl font-bold text-otimaBlue mt-1">4</h3>
                     <span class="text-xs text-blue-600 font-medium">Listos para agendar cita</span>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                    <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Citas / Presentaciones</p>
-                    <h3 id="kpi-citas" class="text-2xl font-bold text-amber-500 mt-1">Pendientes</h3>
-                    <span class="text-xs text-amber-600 font-medium">En gestión de llamadas</span>
+                    <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Cuentas con O'tima</p>
+                    <h3 class="text-2xl font-bold text-otimaGreen mt-1">7 Labs</h3>
+                    <span class="text-xs text-emerald-600 font-medium">Clientes activos / Retención</span>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                    <p class="text-xs font-semibold text-otimaGreen uppercase tracking-wider">Solución Principal</p>
-                    <h3 class="text-lg font-bold text-otimaGreen mt-1">O'tima SIP + ETL</h3>
-                    <span class="text-xs text-slate-500 font-medium">Integración IQVIA sin errores</span>
+                    <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Por Prospectar</p>
+                    <h3 class="text-2xl font-bold text-amber-500 mt-1">28 Labs</h3>
+                    <span class="text-xs text-amber-600 font-medium">Oportunidades en frío</span>
                 </div>
             </div>
 
-            <!-- Resumen Rápido de Alertas -->
+            <!-- Panel de Alertas y Próximos Pasos -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h3 class="font-bold text-slate-800 mb-2 text-base flex items-center">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> Próximos Pasos Prioritarios
+                    <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> Acciones Prioritarias (LinkedIn Aceptado)
                 </h3>
-                <p class="text-sm text-slate-600 mb-4">Cuentas que ya aceptaron la invitación en LinkedIn y requieren el envío inmediato de propuesta de horario para la demo de 15 minutos:</p>
+                <p class="text-sm text-slate-600 mb-4">Cuentas que ya aceptaron la invitación y requieren propuesta de horario para la presentación de 15 minutos:</p>
                 <div id="alertas-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <!-- Dinámico -->
+                    <!-- Inyectado dinámicamente -->
                 </div>
             </div>
         </div>
 
         <!-- ================= VISTA 2: GESTIÓN Y ACTUALIZACIÓN ================= -->
         <div id="vista-gestion" class="space-y-4 hidden">
-            <!-- Barra de Herramientas / Filtros -->
+            <!-- Barra de Herramientas y Filtros -->
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="relative w-full md:w-96">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
-                    <input type="text" id="inputBuscar" onkeyup="filtrarDatos()" placeholder="Buscar laboratorio o contacto..." class="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-otaloBlue">
+                    <input type="text" id="inputBuscar" onkeyup="filtrarDatos()" placeholder="Buscar laboratorio o contacto..." class="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-otimaBlue">
                 </div>
                 <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
                     <span class="text-xs text-slate-500 font-medium">Filtrar por estatus:</span>
                     <select id="filtroEstatus" onchange="filtrarDatos()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-otimaBlue">
                         <option value="TODOS">Todos los registros</option>
-                        <option value="Aceptó Conexión">Aceptó Conexión (LinkedIn)</option>
+                        <option value="Contactado">Contactado (LinkedIn)</option>
                         <option value="Pendiente de Cita">Pendiente de Cita</option>
                         <option value="Cita Agendada">Cita Agendada</option>
-                        <option value="Presentación Realizada">Presentación Realizada</option>
+                        <option value="Cliente Activo">Cliente Activo</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Tabla Interactiva -->
+            <!-- Tabla Interactiva de Gestión -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
-                                <th class="px-5 py-3.5 font-semibold">Empresa / Lab</th>
+                                <th class="px-5 py-3.5 font-semibold">Laboratorio / Cuenta</th>
                                 <th class="px-5 py-3.5 font-semibold">Contacto Clave / Cargo</th>
-                                <th class="px-5 py-3.5 font-semibold">LinkedIn</th>
-                                <th class="px-5 py-3.5 font-semibold">Estatus de Seguimiento</th>
+                                <th class="px-5 py-3.5 font-semibold">Estatus Comercial</th>
+                                <th class="px-5 py-3.5 font-semibold">Cambiar Estatus</th>
                                 <th class="px-5 py-3.5 font-semibold">Siguiente Acción / Pitch</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-cuerpo" class="divide-y divide-slate-200 text-sm">
-                            <!-- Datos inyectados por JavaScript -->
+                            <!-- Inyectado por JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -132,28 +132,14 @@ HTML
 
     <!-- Script de Lógica e Interactividad -->
     <script>
-        // Datos sincronizados con tu base actual (puedes actualizarlos aquí o cargarlos del JSON)
         let laboratoriosData = [
-            {
-                id: 1,
-                empresa: "Lilly",
-                contacto_clave: "Isaac Mayoral",
-                cargo: "Sales Operations / Effectiveness",
-                contactado_linkedin: true,
-                conexion_aceptada: true,
-                estatus_seguimiento: "Pendiente de Cita",
-                siguiente_accion: "Enviar mensaje proponiendo horario para llamada de presentación de O'tima SIP"
-            },
-            {
-                id: 2,
-                empresa: "Phillips",
-                contacto_clave: "Alberto Villagran",
-                cargo: "Commercial Operations Lead",
-                contactado_linkedin: true,
-                conexion_aceptada: true,
-                estatus_seguimiento: "Pendiente de Cita",
-                siguiente_accion: "Enviar mensaje proponiendo horario para llamada de presentación"
-            }
+            { id: 1, empresa: "Lilly", contacto_clave: "Isaac Mayoral", cargo: "Sales Operations / Effectiveness", estatus: "Contactado", accion: "Enviar mensaje proponiendo horario para demo SIP" },
+            { id: 2, empresa: "Phillips", contacto_clave: "Alberto Villagran", cargo: "Commercial Operations Lead", estatus: "Contactado", accion: "Enviar mensaje proponiendo horario de llamada" },
+            { id: 3, empresa: "Kenvue", contacto_clave: "Carlos Rojas", cargo: "Commercial Excellence", estatus: "Contactado", accion: "Seguimiento post-conexión LinkedIn" },
+            { id: 4, empresa: "Grünenthal", contacto_clave: "Ximena Salinas", cargo: "Sales Effectiveness", estatus: "Contactado", accion: "Coordinar llamada de presentación de 15 min" },
+            { id: 5, empresa: "Abbvie", contacto_clave: "Equipo Interno", cargo: "Commercial Operations", estatus: "Cliente Activo", accion: "Explorar upselling (Cadi / O'target)" },
+            { id: 6, empresa: "Sanofi", contacto_clave: "Equipo Interno", cargo: "Sales Management", estatus: "Cliente Activo", accion: "Revisión de módulos adicionales" },
+            { id: 7, empresa: "Pfizer", contacto_clave: "Por definir", cargo: "Sales Operations", estatus: "Por Prospectar", accion: "Buscar responsable en LinkedIn" }
         ];
 
         function cambiarVista(vista) {
@@ -178,20 +164,19 @@ HTML
         }
 
         function actualizarKPIs() {
-            const aceptados = laboratoriosData.filter(l => l.conexion_aceptada).length;
-            document.getElementById('kpi-aceptados').innerText = aceptados;
+            const contactados = laboratoriosData.filter(l => l.estatus === 'Contactado').length;
+            document.getElementById('kpi-contactados').innerText = contactados;
 
-            // Renderizar alertas
             const contenedorAlertas = document.getElementById('alertas-container');
             contenedorAlertas.innerHTML = "";
             
-            laboratoriosData.filter(l => l.conexion_aceptada).forEach(lab => {
+            laboratoriosData.filter(l => l.estatus === 'Contactado').forEach(lab => {
                 contenedorAlertas.innerHTML += `
                     <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <span class="font-bold text-otimaDark">${lab.empresa}</span>
-                                <span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-semibold">Conexión Aceptada</span>
+                                <span class="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full font-semibold">LinkedIn Conectado</span>
                             </div>
                             <p class="text-xs text-slate-600">Contacto: <strong>${lab.contacto_clave}</strong> (${lab.cargo})</p>
                         </div>
@@ -211,6 +196,11 @@ HTML
             tbody.innerHTML = "";
 
             data.forEach((lab, index) => {
+                let badgeColor = "bg-slate-100 text-slate-700";
+                if(lab.estatus === 'Contactado') badgeColor = "bg-blue-100 text-blue-800";
+                if(lab.estatus === 'Cita Agendada') badgeColor = "bg-amber-100 text-amber-800";
+                if(lab.estatus === 'Cliente Activo') badgeColor = "bg-emerald-100 text-emerald-800";
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="px-5 py-4 font-semibold text-otimaDark">${lab.empresa}</td>
@@ -219,23 +209,25 @@ HTML
                             <div class="text-xs text-slate-400">${lab.cargo}</div>
                         </td>
                         <td class="px-5 py-4">
-                            <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-medium">Sí (Aceptada)</span>
+                            <span class="${badgeColor} text-xs px-2.5 py-1 rounded-full font-medium">${lab.estatus}</span>
                         </td>
                         <td class="px-5 py-4">
-                            <select onchange="cambiarEstatus(${index}, this.value)" class="text-xs bg-amber-50 text-amber-800 border border-amber-300 rounded px-2.5 py-1.5 font-medium focus:outline-none">
-                                <option value="Pendiente de Cita" ${lab.estatus_seguimiento === 'Pendiente de Cita' ? 'selected' : ''}>Pendiente de Cita</option>
-                                <option value="Cita Agendada" ${lab.estatus_seguimiento === 'Cita Agendada' ? 'selected' : ''}>Cita Agendada</option>
-                                <option value="Presentación Realizada" ${lab.estatus_seguimiento === 'Presentación Realizada' ? 'selected' : ''}>Presentación Realizada</option>
+                            <select onchange="cambiarEstatus(${index}, this.value)" class="text-xs bg-white text-slate-700 border border-slate-300 rounded px-2 py-1.5 font-medium focus:outline-none focus:ring-1 focus:ring-otimaBlue">
+                                <option value="Por Prospectar" ${lab.estatus === 'Por Prospectar' ? 'selected' : ''}>Por Prospectar</option>
+                                <option value="Contactado" ${lab.estatus === 'Contactado' ? 'selected' : ''}>Contactado (LinkedIn)</option>
+                                <option value="Pendiente de Cita" ${lab.estatus === 'Pendiente de Cita' ? 'selected' : ''}>Pendiente de Cita</option>
+                                <option value="Cita Agendada" ${lab.estatus === 'Cita Agendada' ? 'selected' : ''}>Cita Agendada</option>
+                                <option value="Cliente Activo" ${lab.estatus === 'Cliente Activo' ? 'selected' : ''}>Cliente Activo</option>
                             </select>
                         </td>
-                        <td class="px-5 py-4 text-xs text-slate-600">${lab.siguiente_accion}</td>
+                        <td class="px-5 py-4 text-xs text-slate-600">${lab.accion}</td>
                     </tr>
                 `;
             });
         }
 
         function cambiarEstatus(index, nuevoEstatus) {
-            laboratoriosData[index].estatus_seguimiento = nuevoEstatus;
+            laboratoriosData[index].estatus = nuevoEstatus;
             alert(`Estatus actualizado para ${laboratoriosData[index].empresa} a: ${nuevoEstatus}`);
         }
 
@@ -245,14 +237,13 @@ HTML
 
             const filtrados = laboratoriosData.filter(lab => {
                 const matchTexto = lab.empresa.toLowerCase().includes(query) || lab.contacto_clave.toLowerCase().includes(query);
-                const matchEstatus = filtroEstatus === 'TODOS' || lab.estatus_seguimiento === filtroEstatus;
+                const matchEstatus = filtroEstatus === 'TODOS' || lab.estatus === filtroEstatus;
                 return matchTexto && matchEstatus;
             });
 
             renderizarTabla(filtrados);
         }
 
-        // Inicializar métricas al cargar
         window.onload = () => {
             actualizarKPIs();
         };
