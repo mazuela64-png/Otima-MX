@@ -14,7 +14,10 @@ CREATE TABLE contactos (
     nombre_contacto VARCHAR(150) NOT NULL,
     cargo VARCHAR(100),
     perfil_linkedin VARCHAR(255),
-    estatus VARCHAR(50) DEFAULT 'Por Contactar', -- Por Contactar, Contactado, En Conversación, Reunión Agendada, Propuesta Enviada
+    contactado_linkedin BOOLEAN DEFAULT FALSE,
+    conexion_aceptada BOOLEAN DEFAULT FALSE,
+    estatus_seguimiento VARCHAR(100) DEFAULT 'Pendiente de Cita', -- Pendiente de Cita, Cita Agendada, Presentación Realizada
+    fecha_cita_propuesta DATE NULL,
     canal_acercamiento VARCHAR(50) DEFAULT 'LinkedIn',
     fecha_contacto DATE,
     fecha_seguimiento DATE,
@@ -22,9 +25,9 @@ CREATE TABLE contactos (
     FOREIGN KEY (laboratorio_id) REFERENCES laboratorios(id)
 );
 
--- Tabla para el registro de módulos O'tima ofertados en México
+-- Módulos O'tima
 CREATE TABLE modulos_ofertados (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_modulo VARCHAR(100) NOT NULL, -- O'tima ETL, Cadi, O'tima Core, O'target, O'timaWeb
+    nombre_modulo VARCHAR(100) NOT NULL, 
     descripcion VARCHAR(255)
 );
