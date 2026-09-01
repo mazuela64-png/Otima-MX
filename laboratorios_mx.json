@@ -1,8 +1,7 @@
-JSON
 {
   "pais": "México",
   "solucion": "O'tima SIP - Sales Incentive Planning",
-  "fecha_actualizacion": "2026-08-28",
+  "fecha_actualizacion": "2026-09-01",
   "prospectos": [
     {
       "id": 1,
@@ -10,11 +9,11 @@ JSON
       "contacto_clave": "Isaac Mayoral",
       "cargo": "Sales Operations / Effectiveness",
       "contactado_linkedin": true,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Contactado - Esperando Respuesta",
-      "siguiente_accion": "Enviar mensaje de seguimiento 2 con enfoque en automatización de auditorías IQVIA",
-      "fecha_seguimiento": "2026-09-02"
+      "conexion_aceptada": true,
+      "estatus_seguimiento": "Pendiente de agendar cita de 15 min",
+      "fecha_cita_propuesta": null,
+      "siguiente_accion": "Enviar mensaje proponiendo horario para llamada de presentación de O'tima SIP",
+      "modulos_de_interes": ["O'tima ETL", "O'tima Core (Incentivos)"]
     },
     {
       "id": 2,
@@ -22,95 +21,11 @@ JSON
       "contacto_clave": "Alberto Villagran",
       "cargo": "Commercial Operations Lead",
       "contactado_linkedin": true,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Contactado - Esperando Respuesta",
-      "siguiente_accion": "Compartir propuesta de valor de O'tima para dispositivos médicos",
-      "fecha_seguimiento": "2026-09-02"
-    },
-    {
-      "id": 3,
-      "empresa": "Kenvue",
-      "contacto_clave": "Carlos Rojas",
-      "cargo": "Sales Incentive / SFE Manager",
-      "contactado_linkedin": true,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Contactado - Esperando Respuesta",
-      "siguiente_accion": "Validar conexión y enviar caso de uso de descentralización y gobernanza",
-      "fecha_seguimiento": "2026-09-02"
-    },
-    {
-      "id": 4,
-      "empresa": "Grünenthal",
-      "contacto_clave": "Ximena Salinas",
-      "cargo": "Commercial Excellence Lead",
-      "contactado_linkedin": true,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Contactado - Esperando Respuesta",
-      "siguiente_accion": "Proponer llamada exploratoria de 15 minutos",
-      "fecha_seguimiento": "2026-09-02"
-    },
-    {
-      "id": 5,
-      "empresa": "J&J",
-      "contacto_clave": "Por mapear en LinkedIn",
-      "cargo": "Head of Commercial Operations / SFE",
-      "contactado_linkedin": false,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Por Contactar",
-      "siguiente_accion": "Buscar en LinkedIn perfiles de SFE, Finanzas Comerciales o HR Compensation México",
-      "fecha_seguimiento": "2026-08-31"
-    },
-    {
-      "id": 6,
-      "empresa": "Roche",
-      "contacto_clave": "Por mapear en LinkedIn",
-      "cargo": "Sales Effectiveness Manager",
-      "contactado_linkedin": false,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Por Contactar",
-      "siguiente_accion": "Identificar responsable de cálculo de incentivos y enviar invitación personalizada",
-      "fecha_seguimiento": "2026-08-31"
-    },
-    {
-      "id": 7,
-      "empresa": "Pisa Farmacéutica",
-      "contacto_clave": "Por mapear en LinkedIn",
-      "cargo": "Director / Gerente de Efectividad de Fuerza de Ventas",
-      "contactado_linkedin": false,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Por Contactar",
-      "siguiente_accion": "Contactar con mensaje orientado a grandes fuerzas de venta nacionales y multicuentas",
-      "fecha_seguimiento": "2026-08-31"
-    },
-    {
-      "id": 8,
-      "empresa": "Silanes",
-      "contacto_clave": "Por mapear en LinkedIn",
-      "cargo": "Gerente de Operaciones Comerciales",
-      "contactado_linkedin": false,
-      "conocido": false,
-      "cuenta_con_otima": false,
-      "estatus": "Por Contactar",
-      "siguiente_accion": "Prospectar tomador de decisión en CDMX",
-      "fecha_seguimiento": "2026-08-31"
-    },
-    {
-      "id": 9,
-      "empresa": "Astellas",
-      "contacto_clave": "Contacto Local Astellas México",
-      "cargo": "Dirección Comercial / SFE",
-      "contactado_linkedin": false,
-      "conocido": true,
-      "cuenta_con_otima": true,
-      "estatus": "Cuenta Existente / Expansión",
-      "siguiente_accion": "Seguimiento a la propuesta de módulos adicionales (O'timaBI, Aprobaciones Web, Cadi)",
-      "fecha_seguimiento": "2026-09-04"
+      "conexion_aceptada": true,
+      "estatus_seguimiento": "Pendiente de agendar cita de 15 min",
+      "fecha_cita_propuesta": null,
+      "siguiente_accion": "Enviar mensaje proponiendo horario para llamada de presentación",
+      "modulos_de_interes": ["O'tima SIP"]
     }
   ]
 }
