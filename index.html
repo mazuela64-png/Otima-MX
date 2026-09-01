@@ -106,7 +106,7 @@
                             <option value="Por Prospectar">Por Prospectar</option>
                         </select>
                     </div>
-                    <button onclick="abrirModal()" class="bg-otimaGreen text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition shadow-sm flex items-center justify-center whitespace-nowrap w-full sm:w-auto">
+                    <button onclick="abrirModalNuevo()" class="bg-otimaGreen text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition shadow-sm flex items-center justify-center whitespace-nowrap w-full sm:w-auto">
                         <i class="fa-solid fa-plus mr-1.5"></i> Nuevo Laboratorio
                     </button>
                 </div>
@@ -131,6 +131,7 @@
                                 <th onclick="ordenarTabla('accion')" class="px-5 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 transition select-none">
                                     Siguiente Acción / Pitch <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
                                 </th>
+                                <th class="px-5 py-3.5 font-semibold text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-cuerpo" class="divide-y divide-slate-200 text-sm">
@@ -143,29 +144,30 @@
 
     </main>
 
-    <!-- Modal para Agregar Nuevo Laboratorio -->
-    <div id="modalNuevo" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center px-4">
+    <!-- Modal para Agregar / Editar Laboratorio -->
+    <div id="modalLaboratorio" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center px-4">
         <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl space-y-4">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="font-bold text-lg text-otimaDark"><i class="fa-solid fa-circle-plus text-otimaGreen mr-2"></i> Agregar Nuevo Laboratorio</h3>
+                <h3 id="modalTitulo" class="font-bold text-lg text-otimaDark"><i class="fa-solid fa-circle-plus text-otimaGreen mr-2"></i> Gestión de Laboratorio</h3>
                 <button onclick="cerrarModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
             </div>
+            <input type="hidden" id="editId">
             <div class="space-y-3">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Laboratorio / Empresa *</label>
-                    <input type="text" id="nuevoEmpresa" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Sanofi, Bayer...">
+                    <input type="text" id="inputEmpresa" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Sanofi, Bayer...">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Contacto Clave</label>
-                    <input type="text" id="nuevoContacto" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Juan Pérez o Por definir">
+                    <input type="text" id="inputContacto" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Juan Pérez o Por definir">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Cargo</label>
-                    <input type="text" id="nuevoCargo" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Sales Operations Lead">
+                    <input type="text" id="inputCargo" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Sales Operations Lead">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Estatus Inicial</label>
-                    <select id="nuevoEstatus" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-otimaBlue focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Estatus</label>
+                    <select id="inputEstatus" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-otimaBlue focus:outline-none">
                         <option value="Por Prospectar">Por Prospectar</option>
                         <option value="Contactado">Contactado (LinkedIn)</option>
                         <option value="Pendiente de Cita">Pendiente de Cita</option>
@@ -175,17 +177,17 @@
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Siguiente Acción / Pitch</label>
-                    <input type="text" id="nuevoAccion" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Buscar responsable en LinkedIn">
+                    <input type="text" id="inputAccion" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Buscar responsable en LinkedIn">
                 </div>
             </div>
             <div class="flex justify-end space-x-3 pt-3 border-t">
                 <button onclick="cerrarModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-300 transition">Cancelar</button>
-                <button onclick="guardarNuevoLaboratorio()" class="px-4 py-2 bg-otimaBlue text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Guardar Laboratorio</button>
+                <button onclick="guardarLaboratorio()" class="px-4 py-2 bg-otimaBlue text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Guardar Cambios</button>
             </div>
         </div>
     </div>
 
-    <!-- Script de Gestión y Ordenamiento -->
+    <!-- Script de Gestión, Edición y Ordenamiento -->
     <script>
         let laboratoriosData = [
             { id: 1, empresa: "Lilly", contacto_clave: "Isaac Mayoral", cargo: "Sales Operations / Effectiveness", estatus: "Contactado", accion: "Enviar mensaje proponiendo horario para demo SIP" },
@@ -248,7 +250,7 @@
                 btnDash.className = "px-4 py-1.5 rounded-md text-xs font-semibold transition-all text-slate-300 hover:text-white";
                 divGest.classList.remove('hidden');
                 divDash.classList.add('hidden');
-                renderizarTabla(laboratoriosData);
+                filtrarDatos();
             }
         }
 
@@ -318,6 +320,14 @@
                             </select>
                         </td>
                         <td class="px-5 py-4 text-xs text-slate-600">${lab.accion}</td>
+                        <td class="px-5 py-4 text-center space-x-1 whitespace-nowrap">
+                            <button onclick="abrirModalEditar(${lab.id})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 p-2 rounded-lg text-xs transition" title="Editar registro">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="eliminarLaboratorio(${lab.id})" class="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg text-xs transition" title="Eliminar registro">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -363,39 +373,87 @@
             renderizarTabla(filtrados);
         }
 
-        function abrirModal() {
-            document.getElementById('modalNuevo').classList.remove('hidden');
+        function abrirModalNuevo() {
+            document.getElementById('editId').value = '';
+            document.getElementById('modalTitulo').innerHTML = '<i class="fa-solid fa-circle-plus text-otimaGreen mr-2"></i> Agregar Nuevo Laboratorio';
+            document.getElementById('inputEmpresa').value = '';
+            document.getElementById('inputContacto').value = '';
+            document.getElementById('inputCargo').value = '';
+            document.getElementById('inputEstatus').value = 'Por Prospectar';
+            document.getElementById('inputAccion').value = '';
+            document.getElementById('modalLaboratorio').classList.remove('hidden');
+        }
+
+        function abrirModalEditar(id) {
+            const lab = laboratoriosData.find(l => l.id === id);
+            if (!lab) return;
+
+            document.getElementById('editId').value = lab.id;
+            document.getElementById('modalTitulo').innerHTML = '<i class="fa-solid fa-pen-to-square text-otimaBlue mr-2"></i> Editar Laboratorio';
+            document.getElementById('inputEmpresa').value = lab.empresa;
+            document.getElementById('inputContacto').value = lab.contacto_clave;
+            document.getElementById('inputCargo').value = lab.cargo;
+            document.getElementById('inputEstatus').value = lab.estatus;
+            document.getElementById('inputAccion').value = lab.accion;
+            document.getElementById('modalLaboratorio').classList.remove('hidden');
         }
 
         function cerrarModal() {
-            document.getElementById('modalNuevo').classList.add('hidden');
-            document.getElementById('nuevoEmpresa').value = '';
-            document.getElementById('nuevoContacto').value = '';
-            document.getElementById('nuevoCargo').value = '';
-            document.getElementById('nuevoAccion').value = '';
+            document.getElementById('modalLaboratorio').classList.add('hidden');
         }
 
-        function guardarNuevoLaboratorio() {
-            const empresa = document.getElementById('nuevoEmpresa').value.trim();
+        function guardarLaboratorio() {
+            const id = document.getElementById('editId').value;
+            const empresa = document.getElementById('inputEmpresa').value.trim();
             if (!empresa) {
                 alert("Por favor ingresa al menos el nombre del laboratorio.");
                 return;
             }
 
-            const nuevoObj = {
-                id: laboratoriosData.length > 0 ? Math.max(...laboratoriosData.map(l => l.id)) + 1 : 1,
-                empresa: empresa,
-                contacto_clave: document.getElementById('nuevoContacto').value.trim() || "Por definir",
-                cargo: document.getElementById('nuevoCargo').value.trim() || "Sales Operations",
-                estatus: document.getElementById('nuevoEstatus').value,
-                accion: document.getElementById('nuevoAccion').value.trim() || "Seguimiento inicial"
-            };
+            const contacto = document.getElementById('inputContacto').value.trim() || "Por definir";
+            const cargo = document.getElementById('inputCargo').value.trim() || "Sales Operations";
+            const estatus = document.getElementById('inputEstatus').value;
+            const accion = document.getElementById('inputAccion').value.trim() || "Seguimiento inicial";
 
-            laboratoriosData.unshift(nuevoObj);
+            if (id) {
+                // Editar existente
+                const lab = laboratoriosData.find(l => l.id == id);
+                if (lab) {
+                    lab.empresa = empresa;
+                    lab.contacto_clave = contacto;
+                    lab.cargo = cargo;
+                    lab.estatus = estatus;
+                    lab.accion = accion;
+                }
+                alert(`¡Laboratorio ${empresa} actualizado exitosamente!`);
+            } else {
+                // Crear nuevo
+                const nuevoObj = {
+                    id: laboratoriosData.length > 0 ? Math.max(...laboratoriosData.map(l => l.id)) + 1 : 1,
+                    empresa: empresa,
+                    contacto_clave: contacto,
+                    cargo: cargo,
+                    estatus: estatus,
+                    accion: accion
+                };
+                laboratoriosData.unshift(nuevoObj);
+                alert(`¡Laboratorio ${empresa} agregado exitosamente!`);
+            }
+
             cerrarModal();
             actualizarKPIs();
             filtrarDatos();
-            alert(`¡Laboratorio ${empresa} agregado exitosamente!`);
+        }
+
+        function eliminarLaboratorio(id) {
+            const lab = laboratoriosData.find(l => l.id === id);
+            if (!lab) return;
+
+            if (confirm(`¿Estás seguro de eliminar el registro de ${lab.empresa}?`)) {
+                laboratoriosData = laboratoriosData.filter(l => l.id !== id);
+                actualizarKPIs();
+                filtrarDatos();
+            }
         }
 
         window.onload = () => {
