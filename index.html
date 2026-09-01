@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -88,36 +89,49 @@
 
         <!-- ================= VISTA 2: GESTIÓN Y ACTUALIZACIÓN ================= -->
         <div id="vista-gestion" class="space-y-4 hidden">
-            <!-- Barra de Herramientas y Filtros -->
+            <!-- Barra de Herramientas, Filtros y Botón de Agregar -->
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="relative w-full md:w-96">
+                <div class="relative w-full md:w-80">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
                     <input type="text" id="inputBuscar" onkeyup="filtrarDatos()" placeholder="Buscar laboratorio o contacto..." class="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-otimaBlue">
                 </div>
-                <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
-                    <span class="text-xs text-slate-500 font-medium">Filtrar por estatus:</span>
-                    <select id="filtroEstatus" onchange="filtrarDatos()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-otimaBlue">
-                        <option value="TODOS">Todos los registros</option>
-                        <option value="Contactado">Contactado (LinkedIn)</option>
-                        <option value="Pendiente de Cita">Pendiente de Cita</option>
-                        <option value="Cita Agendada">Cita Agendada</option>
-                        <option value="Cliente Activo">Cliente Activo</option>
-                        <option value="Por Prospectar">Por Prospectar</option>
-                    </select>
+                <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 w-full md:w-auto justify-end">
+                    <div class="flex items-center space-x-2 w-full sm:w-auto">
+                        <span class="text-xs text-slate-500 font-medium whitespace-nowrap">Filtrar:</span>
+                        <select id="filtroEstatus" onchange="filtrarDatos()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-otimaBlue w-full">
+                            <option value="TODOS">Todos los registros</option>
+                            <option value="Contactado">Contactado (LinkedIn)</option>
+                            <option value="Pendiente de Cita">Pendiente de Cita</option>
+                            <option value="Cita Agendada">Cita Agendada</option>
+                            <option value="Cliente Activo">Cliente Activo</option>
+                            <option value="Por Prospectar">Por Prospectar</option>
+                        </select>
+                    </div>
+                    <button onclick="abrirModal()" class="bg-otimaGreen text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition shadow-sm flex items-center justify-center whitespace-nowrap w-full sm:w-auto">
+                        <i class="fa-solid fa-plus mr-1.5"></i> Nuevo Laboratorio
+                    </button>
                 </div>
             </div>
 
-            <!-- Tabla Interactiva de Gestión -->
+            <!-- Tabla Interactiva con Encabezados Ordenables -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
-                                <th class="px-5 py-3.5 font-semibold">Laboratorio / Cuenta</th>
-                                <th class="px-5 py-3.5 font-semibold">Contacto Clave / Cargo</th>
-                                <th class="px-5 py-3.5 font-semibold">Estatus Comercial</th>
+                                <th onclick="ordenarTabla('empresa')" class="px-5 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 transition select-none">
+                                    Laboratorio / Cuenta <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+                                </th>
+                                <th onclick="ordenarTabla('contacto_clave')" class="px-5 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 transition select-none">
+                                    Contacto Clave / Cargo <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+                                </th>
+                                <th onclick="ordenarTabla('estatus')" class="px-5 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 transition select-none">
+                                    Estatus Comercial <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+                                </th>
                                 <th class="px-5 py-3.5 font-semibold">Cambiar Estatus</th>
-                                <th class="px-5 py-3.5 font-semibold">Siguiente Acción / Pitch</th>
+                                <th onclick="ordenarTabla('accion')" class="px-5 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 transition select-none">
+                                    Siguiente Acción / Pitch <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="tabla-cuerpo" class="divide-y divide-slate-200 text-sm">
@@ -130,7 +144,49 @@
 
     </main>
 
-    <!-- Script con la Base Completa de Registros -->
+    <!-- Modal para Agregar Nuevo Laboratorio -->
+    <div id="modalNuevo" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center px-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-lg text-otimaDark"><i class="fa-solid fa-circle-plus text-otimaGreen mr-2"></i> Agregar Nuevo Laboratorio</h3>
+                <button onclick="cerrarModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Laboratorio / Empresa *</label>
+                    <input type="text" id="nuevoEmpresa" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Sanofi, Bayer...">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Contacto Clave</label>
+                    <input type="text" id="nuevoContacto" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Juan Pérez o Por definir">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Cargo</label>
+                    <input type="text" id="nuevoCargo" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Sales Operations Lead">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Estatus Inicial</label>
+                    <select id="nuevoEstatus" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-otimaBlue focus:outline-none">
+                        <option value="Por Prospectar">Por Prospectar</option>
+                        <option value="Contactado">Contactado (LinkedIn)</option>
+                        <option value="Pendiente de Cita">Pendiente de Cita</option>
+                        <option value="Cita Agendada">Cita Agendada</option>
+                        <option value="Cliente Activo">Cliente Activo</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Siguiente Acción / Pitch</label>
+                    <input type="text" id="nuevoAccion" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-otimaBlue focus:outline-none" placeholder="Ej. Buscar responsable en LinkedIn">
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 pt-3 border-t">
+                <button onclick="cerrarModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-300 transition">Cancelar</button>
+                <button onclick="guardarNuevoLaboratorio()" class="px-4 py-2 bg-otimaBlue text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Guardar Laboratorio</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Gestión y Ordenamiento -->
     <script>
         let laboratoriosData = [
             { id: 1, empresa: "Lilly", contacto_clave: "Isaac Mayoral", cargo: "Sales Operations / Effectiveness", estatus: "Contactado", accion: "Enviar mensaje proponiendo horario para demo SIP" },
@@ -173,6 +229,8 @@
             { id: 38, empresa: "Grifols", contacto_clave: "Por definir", cargo: "Sales Effectiveness", estatus: "Por Prospectar", accion: "Mapeo de prospectos en LinkedIn" },
             { id: 39, empresa: "Recordati", contacto_clave: "Por definir", cargo: "Commercial Excellence", estatus: "Por Prospectar", accion: "Mapeo de prospectos en LinkedIn" }
         ];
+
+        let ordenActual = { columna: null, ascendente: true };
 
         function cambiarVista(vista) {
             const btnDash = document.getElementById('btn-dashboard');
@@ -234,11 +292,12 @@
             const tbody = document.getElementById('tabla-cuerpo');
             tbody.innerHTML = "";
 
-            data.forEach((lab, index) => {
+            data.forEach((lab) => {
                 let badgeColor = "bg-slate-100 text-slate-700";
                 if(lab.estatus === 'Contactado') badgeColor = "bg-blue-100 text-blue-800";
                 if(lab.estatus === 'Cita Agendada') badgeColor = "bg-amber-100 text-amber-800";
                 if(lab.estatus === 'Cliente Activo') badgeColor = "bg-emerald-100 text-emerald-800";
+                if(lab.estatus === 'Pendiente de Cita') badgeColor = "bg-purple-100 text-purple-800";
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
@@ -251,7 +310,7 @@
                             <span class="${badgeColor} text-xs px-2.5 py-1 rounded-full font-medium">${lab.estatus}</span>
                         </td>
                         <td class="px-5 py-4">
-                            <select onchange="cambiarEstatus(${index}, this.value)" class="text-xs bg-white text-slate-700 border border-slate-300 rounded px-2 py-1.5 font-medium focus:outline-none focus:ring-1 focus:ring-otimaBlue">
+                            <select onchange="cambiarEstatus(${lab.id}, this.value)" class="text-xs bg-white text-slate-700 border border-slate-300 rounded px-2 py-1.5 font-medium focus:outline-none focus:ring-1 focus:ring-otimaBlue">
                                 <option value="Por Prospectar" ${lab.estatus === 'Por Prospectar' ? 'selected' : ''}>Por Prospectar</option>
                                 <option value="Contactado" ${lab.estatus === 'Contactado' ? 'selected' : ''}>Contactado (LinkedIn)</option>
                                 <option value="Pendiente de Cita" ${lab.estatus === 'Pendiente de Cita' ? 'selected' : ''}>Pendiente de Cita</option>
@@ -265,10 +324,31 @@
             });
         }
 
-        function cambiarEstatus(index, nuevoEstatus) {
-            laboratoriosData[index].estatus = nuevoEstatus;
-            alert(`Estatus actualizado para ${laboratoriosData[index].empresa} a: ${nuevoEstatus}`);
-            actualizarKPIs();
+        function ordenarTabla(columna) {
+            if (ordenActual.columna === columna) {
+                ordenActual.ascendente = !ordenActual.ascendente;
+            } else {
+                ordenActual.columna = columna;
+                ordenActual.ascendente = true;
+            }
+
+            laboratoriosData.sort((a, b) => {
+                let valA = (a[columna] || "").toLowerCase();
+                let valB = (b[columna] || "").toLowerCase();
+                if (valA < valB) return ordenActual.ascendente ? -1 : 1;
+                if (valA > valB) return ordenActual.ascendente ? 1 : -1;
+                return 0;
+            });
+
+            filtrarDatos();
+        }
+
+        function cambiarEstatus(id, nuevoEstatus) {
+            const lab = laboratoriosData.find(l => l.id === id);
+            if (lab) {
+                lab.estatus = nuevoEstatus;
+                actualizarKPIs();
+            }
         }
 
         function filtrarDatos() {
@@ -282,6 +362,41 @@
             });
 
             renderizarTabla(filtrados);
+        }
+
+        function abrirModal() {
+            document.getElementById('modalNuevo').classList.remove('hidden');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalNuevo').classList.add('hidden');
+            document.getElementById('nuevoEmpresa').value = '';
+            document.getElementById('nuevoContacto').value = '';
+            document.getElementById('nuevoCargo').value = '';
+            document.getElementById('nuevoAccion').value = '';
+        }
+
+        function guardarNuevoLaboratorio() {
+            const empresa = document.getElementById('nuevoEmpresa').value.trim();
+            if (!empresa) {
+                alert("Por favor ingresa al menos el nombre del laboratorio.");
+                return;
+            }
+
+            const nuevoObj = {
+                id: laboratoriosData.length > 0 ? Math.max(...laboratoriosData.map(l => l.id)) + 1 : 1,
+                empresa: empresa,
+                contacto_clave: document.getElementById('nuevoContacto').value.trim() || "Por definir",
+                cargo: document.getElementById('nuevoCargo').value.trim() || "Sales Operations",
+                estatus: document.getElementById('nuevoEstatus').value,
+                accion: document.getElementById('nuevoAccion').value.trim() || "Seguimiento inicial"
+            };
+
+            laboratoriosData.unshift(nuevoObj);
+            cerrarModal();
+            actualizarKPIs();
+            filtrarDatos();
+            alert(`¡Laboratorio ${empresa} agregado exitosamente!`);
         }
 
         window.onload = () => {
