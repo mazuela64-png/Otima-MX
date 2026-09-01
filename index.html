@@ -55,22 +55,22 @@ HTML
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Universo Total Target</p>
-                    <h3 class="text-2xl font-bold text-otimaDark mt-1">39 Labs</h3>
+                    <h3 id="kpi-total" class="text-2xl font-bold text-otimaDark mt-1">0 Labs</h3>
                     <span class="text-xs text-slate-500 font-medium">Cobertura Nacional México</span>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-xs font-semibold text-blue-600 uppercase tracking-wider">LinkedIn: Conectados</p>
-                    <h3 id="kpi-contactados" class="text-2xl font-bold text-otimaBlue mt-1">4</h3>
+                    <h3 id="kpi-contactados" class="text-2xl font-bold text-otimaBlue mt-1">0</h3>
                     <span class="text-xs text-blue-600 font-medium">Listos para agendar cita</span>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Cuentas con O'tima</p>
-                    <h3 class="text-2xl font-bold text-otimaGreen mt-1">7 Labs</h3>
+                    <h3 id="kpi-activos" class="text-2xl font-bold text-otimaGreen mt-1">0 Labs</h3>
                     <span class="text-xs text-emerald-600 font-medium">Clientes activos / Retención</span>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                     <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Por Prospectar</p>
-                    <h3 class="text-2xl font-bold text-amber-500 mt-1">28 Labs</h3>
+                    <h3 id="kpi-prospectar" class="text-2xl font-bold text-amber-500 mt-1">0 Labs</h3>
                     <span class="text-xs text-amber-600 font-medium">Oportunidades en frío</span>
                 </div>
             </div>
@@ -82,7 +82,7 @@ HTML
                 </h3>
                 <p class="text-sm text-slate-600 mb-4">Cuentas que ya aceptaron la invitación y requieren propuesta de horario para la presentación de 15 minutos:</p>
                 <div id="alertas-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <!-- Inyectado dinámicamente -->
+                    <!-- Dinámico -->
                 </div>
             </div>
         </div>
@@ -103,6 +103,7 @@ HTML
                         <option value="Pendiente de Cita">Pendiente de Cita</option>
                         <option value="Cita Agendada">Cita Agendada</option>
                         <option value="Cliente Activo">Cliente Activo</option>
+                        <option value="Por Prospectar">Por Prospectar</option>
                     </select>
                 </div>
             </div>
@@ -121,7 +122,7 @@ HTML
                             </tr>
                         </thead>
                         <tbody id="tabla-cuerpo" class="divide-y divide-slate-200 text-sm">
-                            <!-- Inyectado por JavaScript -->
+                            <!-- Dinámico -->
                         </tbody>
                     </table>
                 </div>
@@ -130,17 +131,23 @@ HTML
 
     </main>
 
-    <!-- Script de Lógica e Interactividad -->
+    <!-- Script de Carga Dinámica desde laboratorios_mx.json -->
     <script>
-        let laboratoriosData = [
-            { id: 1, empresa: "Lilly", contacto_clave: "Isaac Mayoral", cargo: "Sales Operations / Effectiveness", estatus: "Contactado", accion: "Enviar mensaje proponiendo horario para demo SIP" },
-            { id: 2, empresa: "Phillips", contacto_clave: "Alberto Villagran", cargo: "Commercial Operations Lead", estatus: "Contactado", accion: "Enviar mensaje proponiendo horario de llamada" },
-            { id: 3, empresa: "Kenvue", contacto_clave: "Carlos Rojas", cargo: "Commercial Excellence", estatus: "Contactado", accion: "Seguimiento post-conexión LinkedIn" },
-            { id: 4, empresa: "Grünenthal", contacto_clave: "Ximena Salinas", cargo: "Sales Effectiveness", estatus: "Contactado", accion: "Coordinar llamada de presentación de 15 min" },
-            { id: 5, empresa: "Abbvie", contacto_clave: "Equipo Interno", cargo: "Commercial Operations", estatus: "Cliente Activo", accion: "Explorar upselling (Cadi / O'target)" },
-            { id: 6, empresa: "Sanofi", contacto_clave: "Equipo Interno", cargo: "Sales Management", estatus: "Cliente Activo", accion: "Revisión de módulos adicionales" },
-            { id: 7, empresa: "Pfizer", contacto_clave: "Por definir", cargo: "Sales Operations", estatus: "Por Prospectar", accion: "Buscar responsable en LinkedIn" }
-        ];
+        let laboratoriosData = [];
+
+        // Cargar datos del JSON al iniciar la página
+        async function cargarDatos() {
+            try {
+                const response = await fetch('laboratorios_mx.json');
+                const data = await response.json();
+                laboratoriosData = data.prospectos || [];
+                actualizarKPIs();
+                renderizarTabla(laboratoriosData);
+            } catch (error) {
+                console.error("Error al cargar el archivo JSON:", error);
+                alert("No se pudo cargar el archivo laboratorios_mx.json. Asegúrate de que esté en el mismo directorio en GitHub.");
+            }
+        }
 
         function cambiarVista(vista) {
             const btnDash = document.getElementById('btn-dashboard');
@@ -164,13 +171,20 @@ HTML
         }
 
         function actualizarKPIs() {
-            const contactados = laboratoriosData.filter(l => l.estatus === 'Contactado').length;
+            const total = laboratoriosData.length;
+            const contactados = laboratoriosData.filter(l => l.estatus === 'Contactado' || l.estatus_linkedin === 'Aceptó Conexión').length;
+            const activos = laboratoriosData.filter(l => l.estatus === 'Cliente Activo').length;
+            const prospectar = laboratoriosData.filter(l => l.estatus === 'Por Prospectar' || !l.estatus).length;
+
+            document.getElementById('kpi-total').innerText = `${total} Labs`;
             document.getElementById('kpi-contactados').innerText = contactados;
+            document.getElementById('kpi-activos').innerText = `${activos} Labs`;
+            document.getElementById('kpi-prospectar').innerText = `${prospectar} Labs`;
 
             const contenedorAlertas = document.getElementById('alertas-container');
             contenedorAlertas.innerHTML = "";
             
-            laboratoriosData.filter(l => l.estatus === 'Contactado').forEach(lab => {
+            laboratoriosData.filter(l => l.estatus === 'Contactado' || l.estatus_linkedin === 'Aceptó Conexión').forEach(lab => {
                 contenedorAlertas.innerHTML += `
                     <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg flex flex-col justify-between">
                         <div>
@@ -178,7 +192,7 @@ HTML
                                 <span class="font-bold text-otimaDark">${lab.empresa}</span>
                                 <span class="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full font-semibold">LinkedIn Conectado</span>
                             </div>
-                            <p class="text-xs text-slate-600">Contacto: <strong>${lab.contacto_clave}</strong> (${lab.cargo})</p>
+                            <p class="text-xs text-slate-600">Contacto: <strong>${lab.contacto_clave}</strong> (${lab.cargo || 'N/A'})</p>
                         </div>
                         <div class="mt-3 pt-2 border-t border-slate-200 flex justify-between items-center text-xs">
                             <span class="text-slate-500 italic">Acción: Agendar demo 15 min</span>
@@ -196,31 +210,32 @@ HTML
             tbody.innerHTML = "";
 
             data.forEach((lab, index) => {
+                let estatusActual = lab.estatus || 'Por Prospectar';
                 let badgeColor = "bg-slate-100 text-slate-700";
-                if(lab.estatus === 'Contactado') badgeColor = "bg-blue-100 text-blue-800";
-                if(lab.estatus === 'Cita Agendada') badgeColor = "bg-amber-100 text-amber-800";
-                if(lab.estatus === 'Cliente Activo') badgeColor = "bg-emerald-100 text-emerald-800";
+                if(estatusActual === 'Contactado') badgeColor = "bg-blue-100 text-blue-800";
+                if(estatusActual === 'Cita Agendada') badgeColor = "bg-amber-100 text-amber-800";
+                if(estatusActual === 'Cliente Activo') badgeColor = "bg-emerald-100 text-emerald-800";
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="px-5 py-4 font-semibold text-otimaDark">${lab.empresa}</td>
                         <td class="px-5 py-4">
                             <div class="font-medium text-slate-800">${lab.contacto_clave}</div>
-                            <div class="text-xs text-slate-400">${lab.cargo}</div>
+                            <div class="text-xs text-slate-400">${lab.cargo || 'N/A'}</div>
                         </td>
                         <td class="px-5 py-4">
-                            <span class="${badgeColor} text-xs px-2.5 py-1 rounded-full font-medium">${lab.estatus}</span>
+                            <span class="${badgeColor} text-xs px-2.5 py-1 rounded-full font-medium">${estatusActual}</span>
                         </td>
                         <td class="px-5 py-4">
                             <select onchange="cambiarEstatus(${index}, this.value)" class="text-xs bg-white text-slate-700 border border-slate-300 rounded px-2 py-1.5 font-medium focus:outline-none focus:ring-1 focus:ring-otimaBlue">
-                                <option value="Por Prospectar" ${lab.estatus === 'Por Prospectar' ? 'selected' : ''}>Por Prospectar</option>
-                                <option value="Contactado" ${lab.estatus === 'Contactado' ? 'selected' : ''}>Contactado (LinkedIn)</option>
-                                <option value="Pendiente de Cita" ${lab.estatus === 'Pendiente de Cita' ? 'selected' : ''}>Pendiente de Cita</option>
-                                <option value="Cita Agendada" ${lab.estatus === 'Cita Agendada' ? 'selected' : ''}>Cita Agendada</option>
-                                <option value="Cliente Activo" ${lab.estatus === 'Cliente Activo' ? 'selected' : ''}>Cliente Activo</option>
+                                <option value="Por Prospectar" ${estatusActual === 'Por Prospectar' ? 'selected' : ''}>Por Prospectar</option>
+                                <option value="Contactado" ${estatusActual === 'Contactado' ? 'selected' : ''}>Contactado (LinkedIn)</option>
+                                <option value="Pendiente de Cita" ${estatusActual === 'Pendiente de Cita' ? 'selected' : ''}>Pendiente de Cita</option>
+                                <option value="Cita Agendada" ${estatusActual === 'Cita Agendada' ? 'selected' : ''}>Cita Agendada</option>
+                                <option value="Cliente Activo" ${estatusActual === 'Cliente Activo' ? 'selected' : ''}>Cliente Activo</option>
                             </select>
                         </td>
-                        <td class="px-5 py-4 text-xs text-slate-600">${lab.accion}</td>
+                        <td class="px-5 py-4 text-xs text-slate-600">${lab.siguiente_accion || lab.accion || 'Seguimiento comercial'}</td>
                     </tr>
                 `;
             });
@@ -229,6 +244,7 @@ HTML
         function cambiarEstatus(index, nuevoEstatus) {
             laboratoriosData[index].estatus = nuevoEstatus;
             alert(`Estatus actualizado para ${laboratoriosData[index].empresa} a: ${nuevoEstatus}`);
+            actualizarKPIs();
         }
 
         function filtrarDatos() {
@@ -236,16 +252,18 @@ HTML
             const filtroEstatus = document.getElementById('filtroEstatus').value;
 
             const filtrados = laboratoriosData.filter(lab => {
+                const estatusActual = lab.estatus || 'Por Prospectar';
                 const matchTexto = lab.empresa.toLowerCase().includes(query) || lab.contacto_clave.toLowerCase().includes(query);
-                const matchEstatus = filtroEstatus === 'TODOS' || lab.estatus === filtroEstatus;
+                const matchEstatus = filtroEstatus === 'TODOS' || estatusActual === filtroEstatus;
                 return matchTexto && matchEstatus;
             });
 
             renderizarTabla(filtrados);
         }
 
+        // Cargar al iniciar la página
         window.onload = () => {
-            actualizarKPIs();
+            cargarDatos();
         };
 
         function copiarPitch(nombre) {
